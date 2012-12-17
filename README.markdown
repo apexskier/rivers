@@ -27,8 +27,8 @@ A resource for kayakers and rafters showing location accurate river runs, gauges
 
 - [jQuery](http://jquery.com/)
 - [jQuery UI](http://jqueryui.com/)
-- [HTML5 Boilerplate](html5boilerplate.com)
-- [Bootstrap](twitter.github.com/bootstrap/)
+- [HTML5 Boilerplate](http://html5boilerplate.com)
+- [Bootstrap](http://twitter.github.com/bootstrap/)
 - [mustache.js](http://mustache.github.com/)
 
 ---
