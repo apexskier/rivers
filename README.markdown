@@ -23,6 +23,14 @@ A resource for kayakers and rafters showing location accurate river runs, gauges
 - Run page (show rapids, gauge, markers)
 - More info for runs (elevation change, distance, etc)
 
+### Frameworks / Libraries
+
+- [jQuery](http://jquery.com/)
+- [jQuery UI](http://jqueryui.com/)
+- [HTML5 Boilerplate](html5boilerplate.com)
+- [Bootstrap](twitter.github.com/bootstrap/)
+- [mustache.js](http://mustache.github.com/)
+
 ---
 
 Built by Cameron Little. [Twitter](http://twitter.com/apexskier). [Website](http://camlittle.com).
