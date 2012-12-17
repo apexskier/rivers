@@ -30,6 +30,7 @@ A resource for kayakers and rafters showing location accurate river runs, gauges
 - [HTML5 Boilerplate](http://html5boilerplate.com)
 - [Bootstrap](http://twitter.github.com/bootstrap/)
 - [mustache.js](http://mustache.github.com/)
+- [Google Maps API](https://developers.google.com/maps/documentation/javascript/)
 
 ---
 
