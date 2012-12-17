@@ -1,14 +1,5 @@
 <?php
-require($_SERVER['DOCUMENT_ROOT'] . "/includes/database-connect.php");
-	
-//Start session
-session_start();
-$logged_in = false;
-
-//Check whether the session variable SESS_MEMBER_ID is present or not
-if (trim($_SESSION['SESS_USERNAME']) != '') {
-	$logged_in = true;
-}
+require($_SERVER['DOCUMENT_ROOT'] . "/app/php/database.php");
 ?>
 <!doctype html>
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->

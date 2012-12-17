@@ -1,6 +1,6 @@
 <?php
 	require_once($_SERVER['DOCUMENT_ROOT'] . "/includes/head.php");
-	require_once($_SERVER['DOCUMENT_ROOT'] . "/includes/functions.php");
+	require_once($_SERVER['DOCUMENT_ROOT'] . "//app/php/functions.php");
 	
 	$no_river = false;
 	$river_name = strtolower($_GET['river']);

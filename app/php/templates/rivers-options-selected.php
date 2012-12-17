@@ -2,7 +2,7 @@
 		<select name="river">
 			<option value="0">---</option>
 <?php 
-	require($_SERVER['DOCUMENT_ROOT'] . "/includes/database-connect.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/app/php/database.php");
 	
 	$query = mysql_query("SELECT * FROM rivers ORDER BY river_name");
 	

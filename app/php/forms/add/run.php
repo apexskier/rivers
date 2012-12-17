@@ -11,7 +11,7 @@
 	<label name="gauge_max">Gauge Max</label>
 	<input type="number" name="gauge_max">
 	
-	<?php require_once($_SERVER['DOCUMENT_ROOT'] . "/includes/rivers-options.php"); ?>
+	<?php require_once($_SERVER['DOCUMENT_ROOT'] . "/app/php/templates/rivers-options.php"); ?>
 	
 	<label>Class</label>
 	<div class="run-class-slider"></div>

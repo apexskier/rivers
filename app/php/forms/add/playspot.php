@@ -1,5 +1,5 @@
 <h3>Add a playspot</h3>
-<form name="add-playspot" method="post" action="scripts/add-playspot-exec.php">
+<form name="add-playspot" method="post" action="/app/php/actions/add/playspot.php">
 	<label name="playspot_name">Name</label>
 	<input type="text" name="playspot_name">
 	
@@ -11,8 +11,8 @@
 	<label name="gauge_max">Gauge Max</label>
 	<input type="number" name="gauge_max">
 
-	<?php require_once($_SERVER['DOCUMENT_ROOT'] . "/includes/rivers-options.php"); ?>
-	<?php require_once($_SERVER['DOCUMENT_ROOT'] . "/includes/pickermap.php"); ?>
+	<?php require_once($_SERVER['DOCUMENT_ROOT'] . "/app/php/templates/rivers-options.php"); ?>
+	<?php require_once($_SERVER['DOCUMENT_ROOT'] . "/app/php/templates/pickermap.php"); ?>
 	
 	<label name="description">Description</label>
 	<textarea name="description"></textarea>

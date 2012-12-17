@@ -2,7 +2,7 @@
 	//Start session
 	session_start();
 	
-	require($_SERVER['DOCUMENT_ROOT'] . "/includes/database-connect.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/app/php/database.php");
 	
 	$errmsg_arr = array();
 	$errflag = false;

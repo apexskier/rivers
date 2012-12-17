@@ -1,5 +1,5 @@
 <h3>Add a photo</h3>
-<form name="add-photo" method="post" action="scripts/add-photo-exec.php" enctype="multipart/form-data">
+<form name="add-photo" method="post" action="/app/php/actions/add/photo.php" enctype="multipart/form-data">
 	<label name="photo_name">Name</label>
 	<input type="text" name="photo_name">
 	

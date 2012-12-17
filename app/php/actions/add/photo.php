@@ -1,5 +1,5 @@
 <?php
-	require_once($_SERVER['DOCUMENT_ROOT'] . "/scripts/add-exec-head.php");
+	require_once($_SERVER['DOCUMENT_ROOT'] . "/app/php/actions/add/head.php");
 	
 	//function createThumb() {
 		
@@ -27,7 +27,7 @@
 	}
 	
 	$allowedExts = array("jpg", "jpeg");
-	$maxFileSize = 3000000; // 1MB
+	$maxFileSize = 3000000; // 3MB
 	$extension = strtolower(end(explode(".", $_FILES["file"]["name"])));
 	
 	if (!$errflag) {

@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	require_once($_SERVER['DOCUMENT_ROOT'] . "/includes/database-connect.php");
+	require_once($_SERVER['DOCUMENT_ROOT'] . "/app/php/database.php");
 	
 	$errmsg_arr = array();
 	$errflag = false;

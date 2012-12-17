@@ -1,16 +1,10 @@
 <?php
 	session_start();
 	
-	require($_SERVER['DOCUMENT_ROOT'] . "/includes/database-connect.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/app/php/database.php");
 	
 	$errmsg_arr = array();
 	$errflag = false;
-	
-	$errmsg_arr[] = 'Registration is currently closed';
-	$_SESSION['ERRMSG_ARR'] = $errmsg_arr;
-	session_write_close();
-	header('Location: http://rivers.camlittle.com/');
-	exit();
 	
 	//Function to sanitize values received from the form. Prevents SQL injection
 	function clean($str) {
@@ -30,12 +24,12 @@
 	$cpassword = clean($_POST['cpassword']);
 	
 	//Input Validations
-	require($_SERVER['DOCUMENT_ROOT'] . "/includes/recaptchalib.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/app/php/recaptchalib.php");
 	$privatekey = "6Lfe0tUSAAAAAPZnUS1Tf6MOby98Suxbo9LrZyb4";
 	$resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
 
 	if (!$resp->is_valid) {
-		$errmsg_arr[] = "The reCAPTCHA wasn't entered correctly. Go back and try it again." . "(reCAPTCHA said: " . $resp->error . ")";
+		$errmsg_arr[] = "The reCAPTCHA wasn't entered correctly. Try it again.";
 		$errflag = true;
 	}
 	if ($fname == '') {
@@ -84,11 +78,11 @@
 		}
 	}
 	
-	//If there are input validations, redirect back to the registration form
+	//If there are input validations, redirect back to the home page
 	if ($errflag) {
 		$_SESSION['ERRMSG_ARR'] = $errmsg_arr;
 		session_write_close();
-		header('Location: http://rivers.camlittle.com/register.php');
+		header('Location: http://rivers.camlittle.com/');
 		exit();
 	}
 

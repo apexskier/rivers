@@ -1,4 +1,4 @@
-<?php require($_SERVER['DOCUMENT_ROOT'] . "/includes/database-connect.php"); ?>
+<?php require($_SERVER['DOCUMENT_ROOT'] . "/app/php/database.php"); ?>
 <?php
 
 if (!$logged_in) {

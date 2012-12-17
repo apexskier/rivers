@@ -1,5 +1,5 @@
 <h3>Add a video</h3>
-<form name="add-video" method="post" action="scripts/add-video-exec.php">
+<form name="add-video" method="post" action="/app/php/actions/add/video.php">
 	<label name="video_url">Video URL</label>
 	<input type="text" name="video_url" required>
 	

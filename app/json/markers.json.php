@@ -1,7 +1,7 @@
 <?php
 
-require_once($_SERVER['DOCUMENT_ROOT'] . "/includes/database-connect.php");
-require_once($_SERVER['DOCUMENT_ROOT'] . "/includes/functions.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/app/php/database.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "//app/php/functions.php");
 
 $query = mysql_query("SELECT * FROM markers");
 
