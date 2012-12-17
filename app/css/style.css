@@ -1,0 +1,159 @@
+/* ==|== primary styles =====================================================
+   Author: Cameron Little
+   ========================================================================== */
+
+body {
+	background: #eee;
+}
+.all-alerts {
+	position: absolute;
+	top: 60px;
+	left: 100px;
+	z-index: 100;
+	width: 25%;
+}
+.alert ul {
+	margin-bottom: 0;
+}
+.submit,
+#file {
+	display: block;
+}
+.ui-slider-horizontal {
+	width: 220px;
+}
+.flow_units {
+	width: 60px;
+}
+
+.navbar-fixed-top {
+	position: relative;
+}
+
+.loading {
+	position: absolute;
+	text-align: center;
+	top: 45%;
+	z-index: 20;
+	width: 100%;
+	font-size: 40px;
+}
+
+.zero-height {
+	height: 0;
+}
+.main-container {
+	position: relative;
+	height: 0;
+	overflow: scroll;
+}
+#main {
+	padding: 10px 20px 0px;
+	height: auto;
+	overflow: scroll;
+}
+
+#recaptcha {
+	margin-bottom: 15px;
+}
+
+.photo {
+	float: left;
+	position: relative;
+}
+.photo .meta {
+	position: absolute;
+	bottom: 15px;
+	right: 15px;
+	color: #fff;
+	background: rgba(0, 0, 0, .6);
+	padding: 0px 5px;
+	border-top-left-radius: 5px;
+}
+.photos img {
+	margin: 0px 15px 15px 0px;
+}
+
+#lightbox-bg {
+	background: rgba(0, 0, 0, .6);
+	width: 100%;
+	height: 100%;
+	z-index: 2000;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	display: none;
+}
+#lightbox {
+	color: #fff;
+	margin: 40px;
+	text-align: center;
+	max-height: 100%;
+}
+#lightbox .meta {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	margin-left: 20px;
+	color: #fff;
+	background: rgba(0, 0, 0, .6);
+	padding: 0px 10px;
+	border-top-left-radius: 10px;
+	text-align: right;
+}
+#lightbox .close {
+	padding: 5px 10px;
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	right: 0;
+	background: rgba(0, 0, 0, .6);
+	border-bottom-left-radius: 10px;
+}
+#lightbox img {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 100%;
+	max-height: 100%;
+}
+
+#lightbox .meta a,
+.photo .meta a {
+	color: #77f;
+}
+#lightbox .meta a:visited,
+.photo .meta a:visited {
+	color: #b27ae6;
+}
+#lightbox .meta a:hover,
+.photo .meta a:hover {
+	color: #77b1ff;
+}
+
+.disabled {
+	color: #999 !important;
+	text-decoration: line-through !important;
+}
+
+
+
+/* ==|== media queries ======================================================
+   EXAMPLE Media Query for Responsive Design.
+   This example overrides the primary ('mobile first') styles
+   Modify as content requires.
+   ========================================================================== */
+@media (max-width: 979px) {
+	.navbar-fixed-top,
+	.navbar-fixed-bottom {
+		margin: 0;
+	}
+	.navbar-fixed-top .navbar-inner,
+	.navbar-fixed-bottom .navbar-inner {
+		padding: 0;
+	}
+}
+@media (max-width: 767px) {
+	body {
+		padding: 0;
+	}
+}

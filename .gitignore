@@ -1,0 +1,14 @@
+app/img/user/profile/original/*
+app/img/user/uploaded/original/*
+app/img/user/profile/thumb/*
+app/img/user/uploaded/thumb/*
+app/img/user/profile/web/*
+app/img/user/uploaded/web/*
+app/cache/*/*
+
+## generic files to ignore
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
