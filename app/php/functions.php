@@ -117,8 +117,8 @@ function getMedia($id, $type, $header_level) {
 				}
 				$photo_html .= ".</small>'>";
 			
-				$imgdata = getimagesize($_SERVER['DOCUMENT_ROOT'] . "/img/user/uploaded/thumb/" . $photo['id'] . "." . $photo['file_type']);
-				$photo_html .= "<img src='/img/user/uploaded/thumb/" . $photo['id'] . "." . $photo['file_type'] . "' height='150' width='" . $imgdata[0] . "'>";
+				$imgdata = getimagesize($_SERVER['DOCUMENT_ROOT'] . "/app/img/user/uploaded/thumb/" . $photo['id'] . "." . $photo['file_type']);
+				$photo_html .= "<img src='/app/img/user/uploaded/thumb/" . $photo['id'] . "." . $photo['file_type'] . "' height='150' width='" . $imgdata[0] . "'>";
 				if ($photo['flow'] != "") {
 					$photo_html .= "<span class='meta'>" . $photo['flow'] . " " . $photo['flow_units'] . "</span>";
 				}

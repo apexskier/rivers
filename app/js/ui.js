@@ -342,3 +342,15 @@ function edit(type, id) {
 		}
 	});
 }
+
+function loadRiver(id) {
+	$.ajax({
+	    url: 'app/php/templates/river-page.php',
+	    data: {river_id: id},
+	    success: function(html){
+			$(".content").html(html);
+			loadSlider();
+			pullContent();
+		}
+	});
+}

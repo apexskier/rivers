@@ -1,4 +1,4 @@
-var meta_start = '<h4>{{{name}}}</h4><p class="meta"><strong><a onclick="loadRiver(\'{{river_name}}\');">{{river_name}}</a></strong>';
+var meta_start = '<h4>{{{name}}}</h4><p class="meta"><strong><a onclick="loadRiver(\'{{river_id}}\');">{{river_name}}</a></strong>';
 
 var rapid_meta_template    = ' - Class {{rating}} rapid </p>';
 var marker_meta_template   = ' - {{type}}</p>';

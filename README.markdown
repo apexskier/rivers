@@ -8,7 +8,6 @@ A resource for kayakers and rafters showing location accurate river runs, gauges
 
 ### Planned features
 
-- Element editing (soon)
 - Photo uploads (soon)
 - Videos (soon)
 - Caching
@@ -19,7 +18,6 @@ A resource for kayakers and rafters showing location accurate river runs, gauges
 - Profile pictures
 - Profile page
 - URLs to content
-- River page
 - Run page (show rapids, gauge, markers)
 - More info for runs (elevation change, distance, etc)
 
