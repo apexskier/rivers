@@ -5,6 +5,7 @@ app/img/user/uploaded/thumb/*
 app/img/user/profile/web/*
 app/img/user/uploaded/web/*
 app/cache/*/*
+app/json/run_points/*
 
 ## generic files to ignore
 *~
