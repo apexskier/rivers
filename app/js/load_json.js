@@ -152,27 +152,6 @@ function return_icon(type) {
 			break;
 	}
 }
-function createMarker(data, icon) {
-	var this_icon = return_icon(icon);
-	
-	var gauge_id;
-	if (data.hasOwnProperty('gauge')) {
-		gauge_id = data.gauge.id;
-	}
-	
-	var new_marker = new google.maps.Marker({
-		id: data.id,
-		database_id: data.database_id,
-		type: data.type,
-		position: new google.maps.LatLng(data.lat, data.lng),
-		map: null,
-		title: data.name,
-		gauge_id: gauge_id,
-		icon: this_icon,
-	});
-	
-	return new_marker;
-}
 
 var json_rivers_array = [];
 
@@ -262,69 +241,42 @@ function setMarkerClick(marker) {
 	}
 }
 
+function createMarker(data, icon) {
+	var this_icon = return_icon(icon);
+	
+	var gauge_id;
+	if (data.hasOwnProperty('gauge')) {
+		gauge_id = data.gauge.id;
+	}
+	
+	var new_marker = new google.maps.Marker({
+		id: data.id,
+		database_id: data.database_id,
+		type: data.type,
+		position: new google.maps.LatLng(data.lat, data.lng),
+		map: null,
+		title: data.name,
+		gauge_id: gauge_id,
+		icon: this_icon,
+	});
+	
+	return new_marker;
+}
+
 $(document).ready(function() {
-	$.getJSON('app/json/gauges.json.php', function(gauges) {
-		$.each(gauges, function(key, gauge) {
-			var new_gauge = createMarker(gauge, "gauge");
-			setMarkerClick(new_gauge);
-			gauges_markers_array.push(new_gauge);
-		});	
-		json_gauges_array = gauges;
-		console.log("Gauges loaded");
-		showByZoom();
-		
-		$.getJSON('app/json/playspots.json.php', function(playspots) {
-			$.each(playspots, function(key, playspot) {
-				
-				var new_playspot = createMarker(playspot, "playspot");
-				
-				setMarkerClick(new_playspot);
-				playspots_markers_array.push(new_playspot);
-				showByZoom();
-			});
-			json_playspots_array = playspots;
-			console.log("Playspots loaded");
-		});
-		
-		$.getJSON('app/json/runs.json.php', function(runs) {
-			$.each(runs, function(key, run) {
-				var run_gauge = $.grep(json_gauges_array, function(gauge) {
-					return gauge.database_id == run.gauge.id;
-				});
-				if (run_gauge.length > 0) {
-					gauge_id = run_gauge[0].id;
-				} else {
-					gauge_id = null;
-				}
-				
-				var run_color = "hsl(0, 0%, 0%)",
-				    hue;
-				if (run_gauge.length > 0) {
-					var flow = +run_gauge[0].current_flow;
-					var flow_min = +run.gauge.min;
-					var flow_max = +run.gauge.max;
-					if (flow > flow_min
-					 && flow < flow_max) {
-						hue = flow * 240 / flow_max;
-						run_color = "hsl(" + hue + ", 80%, 50%)";
-					} else if (flow <= flow_min) {
-						run_color = "hsl(0, 80%, 50%)"; // red
-					} else if (flow >= flow_max) {
-						run_color = "hsl(240, 80%, 50%)"; // blue
-					} else if (flow_min == 0
-					 || flow_max == 0
-					 || flow_min >= flow_max) {
-						run_color = "hsl(0, 0%, 0%)"; // black
-					} else {
-						run_color = "hsl(0, 0%, 0%)"; // black
-					}
-				}
-				
-				var run_path = [];
-				$.each(run.points, function(key, point) {
+	$.getJSON('app/json/runs.json.php', function(runs) {
+		$.each(runs, function(key, run) {
+			var run_color = "hsl(0, 0%, 0%)";
+			
+			var run_path = [];
+			var run_points;
+			var run_path_url = 'app/json/run_points/run_' + run.database_id + '.json';
+			$.getJSON(run_path_url, function(points) {
+				run_points = points;
+				$.each(points, function(key, point) {
 					run_path.push(new google.maps.LatLng(point.lat, point.lng));
 				});
-				
+			
 				var new_polyline = new google.maps.Polyline({
 					id: run.id,
 					map: map,
@@ -332,7 +284,9 @@ $(document).ready(function() {
 					strokeOpacity: 0.75,
 					strokeWeight: 8,
 					title: run.name,
-					gauge_id: gauge_id,
+					gauge_id: run.gauge.id,
+					gauge_min: run.gauge.min,
+					gauge_max: run.gauge.max,
 					type: run.type,
 					path: run_path
 				});
@@ -347,9 +301,67 @@ $(document).ready(function() {
 				setMarkerClick(new_polyline);
 				runs_polyline_array.push(new_polyline);
 			});
-			json_runs_array = runs;
-			console.log("Runs loaded");
 		});
+		json_runs_array = runs;
+		console.log("Runs loaded");
+	});
+	
+	$.getJSON('app/json/gauges.json.php', function(gauges) {
+		$.each(gauges, function(key, gauge) {
+			var new_gauge = createMarker(gauge, "gauge");
+			setMarkerClick(new_gauge);
+			gauges_markers_array.push(new_gauge);
+		});	
+		json_gauges_array = gauges;
+		console.log("Gauges loaded");
+		showByZoom();
+		
+		$.getJSON('app/json/playspots.json.php', function(playspots) {
+			$.each(playspots, function(key, playspot) {
+				var new_playspot = createMarker(playspot, "playspot");
+				setMarkerClick(new_playspot);
+				playspots_markers_array.push(new_playspot);
+				showByZoom();
+			});
+			json_playspots_array = playspots;
+			console.log("Playspots loaded");
+		});
+		
+		$.each(runs_polyline_array, function(key, run) {
+			var run_color = "hsl(0, 0%, 0%)",
+			    hue;
+			    
+			var run_gauge = $.grep(json_gauges_array, function(gauge) {
+				return gauge.database_id == run.gauge_id;
+			});
+			var gauge_id = null;
+			
+			if (run_gauge.length > 0) {
+				gauge_id = run_gauge[0].id;
+				var flow = +run_gauge[0].current_flow;
+				var flow_min = +run.gauge_min;
+				var flow_max = +run.gauge_max;
+				if (flow > flow_min
+				 && flow < flow_max) {
+					hue = flow * 240 / flow_max;
+					run_color = "hsl(" + hue + ", 80%, 50%)";
+				} else if (flow <= flow_min) {
+					run_color = "hsl(0, 80%, 50%)"; // red
+				} else if (flow >= flow_max) {
+					run_color = "hsl(240, 80%, 50%)"; // blue
+				} else if (flow_min == 0
+				 || flow_max == 0
+				 || flow_min >= flow_max) {
+					run_color = "hsl(0, 0%, 0%)"; // black
+				} else {
+					run_color = "hsl(0, 0%, 0%)"; // black
+				}
+				
+				run.setOptions({strokeColor: run_color});
+			}
+			run.setOptions({gauge_id: gauge_id});
+		});
+		console.log("Run colors updated");
 	});
 	
 	$.getJSON('app/json/rivers.json.php', function(rivers) {

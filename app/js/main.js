@@ -18,7 +18,7 @@ window.onresize = function(e) {
 
 function initialize() { // on body load
 	var mapOptions = {
-		zoom: 10,
+		zoom: 11,
 		mapTypeId: google.maps.MapTypeId.TERRAIN
 	};
 	map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);

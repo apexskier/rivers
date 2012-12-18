@@ -1,7 +1,7 @@
  <?php
 
 require_once($_SERVER['DOCUMENT_ROOT'] . "/app/php/database.php");
-require_once($_SERVER['DOCUMENT_ROOT'] . "//app/php/functions.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/app/php/functions.php");
 
 $query = mysql_query("SELECT * FROM gauges");
 
@@ -16,7 +16,7 @@ while ($gauge = mysql_fetch_array($query)) {
 }
 $usgs_gauges_url = 'http://waterservices.usgs.gov/nwis/iv/?sites=' . $gauge_codes;
 $usgs_gauges_url = substr($usgs_gauges_url, 0, -1);
-$usgs_gauges_url .= '&period=PT4H';
+$usgs_gauges_url .= '&period=PT8H';
 $usgs_gauge_data = array();
 
 // Fetch the data.

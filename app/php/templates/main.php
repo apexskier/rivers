@@ -89,6 +89,8 @@
 			<div class="container">
 				<ul class="nav">
 					<li><a href="http://camlittle.com" target="_blank">by Cameron Little</a></li>
+					<li><a href="https://github.com/apexskier/rivers" target="_blank">Project Code</a></li>
+					<li><a href="https://github.com/apexskier/rivers/issues/new" target="_blank">Submit a Bug</a></li>
 				</ul>
 				<ul class="nav pull-right">
 					<li class="divider-vertical"></li>

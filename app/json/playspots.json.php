@@ -1,7 +1,7 @@
 <?php
 
 require_once($_SERVER['DOCUMENT_ROOT'] . "/app/php/database.php");
-require_once($_SERVER['DOCUMENT_ROOT'] . "//app/php/functions.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . "/app/php/functions.php");
 
 $query = mysql_query("SELECT * FROM playspots");
 

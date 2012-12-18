@@ -1,4 +1,4 @@
-var meta_start = '<h4>{{{name}}}</h4><p class="meta"><strong><a href="/river/{{river_url}}">{{river_name}}</a></strong>';
+var meta_start = '<h4>{{{name}}}</h4><p class="meta"><strong><a onclick="loadRiver(\'{{river_name}}\');">{{river_name}}</a></strong>';
 
 var rapid_meta_template    = ' - Class {{rating}} rapid </p>';
 var marker_meta_template   = ' - {{type}}</p>';
@@ -7,9 +7,9 @@ var run_meta_template      = ' - Class {{rating}}, runnable at {{#gauge}}{{min}}
 var items_gauge_template   = ' (currently {{current_flow}}) on the <a onclick="gotoMarker({{id}}, gauges_markers_array)">{{river_name}} Gauge</a>';
 var playspot_meta_template = ' - {{#gauge}}{{#active}}In at {{min}} to {{max}}{{/active}}{{/gauge}}';
 
-var description_template = '<p>{{description}}</p>';
+var description_template = '<p>{{{description}}}</p>';
 
-var meta_template = '<p class="muted"><small>Added by <a href="/user/{{created_user}}">{{created_user}}</a> on {{created_date}}.{{#updated_user}} Updated by <a href="/user/{{updated_user}}">{{updated_user}}</a> by {{updated_date}}.{{/updated_user}}</small></p> <p class="edit"><form method="POST" action="edit_{{type}}.php"> 	<input type="submit" class="btn btn-small" value="Edit {{type}}"> 	<input type="hidden" name="id" value="{{id}}"> </p> ';
+var meta_template = '<p class="muted"><small>Added by <a href="/user/{{created_user}}">{{created_user}}</a> on {{created_date}}.{{#updated_user}} Updated by <a href="/user/{{updated_user}}">{{updated_user}}</a> by {{updated_date}}.{{/updated_user}}</small></p> <p class="edit"><button class="btn btn-small submit" onclick="edit(\'{{type}}\', {{id}})">Edit {{type}}</button></p> ';
 
 var rapid_template     = meta_start + rapid_meta_template + description_template + meta_template;
 var marker_template    = meta_start + marker_meta_template + description_template + meta_template;

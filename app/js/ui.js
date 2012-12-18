@@ -308,3 +308,37 @@ function loadSlider() {
 		});
 	}
 }
+
+function edit(type, id) {
+	var array;
+	switch (type) {
+		case 'River Access':
+			array = json_markers_array[id];
+			type = 'marker';
+			break;
+		case 'Fork':
+			array = json_markers_array[id];
+			type = 'marker';
+			break;
+		case 'rapid':
+			array = json_rapids_array[id];
+			break;
+		case 'run':
+			array = json_runs_array[id];
+			break;
+		case 'playspot':
+			array = json_playspots_array[id];
+			break;
+		default:
+			break;
+	}
+	$.ajax({
+	    url: 'app/php/forms/edit/' + type + '.php',
+	    data: array,
+	    success: function(html){
+			$(".content").html(html);
+			loadSlider();
+			pullContent();
+		}
+	});
+}
