@@ -21,19 +21,22 @@
 						<a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"><i class="icon-user"></i> User tools <b class="caret"></b></a>
 						<ul class="dropdown-menu" role="menu">
 							<?php if ($logged_in): ?>
-								<li><a onclick="loadForm('app/php/forms/add/river.php', false)">Add River</a></li>
-								<li><a onclick="loadForm('app/php/forms/add/marker.php', true)">Add Marker</a></li>
-								<li><a onclick="loadForm('app/php/forms/add/playspot.php', true, 'gauge')">Add Playspot</a></li>
-								<li><a onclick="loadForm('app/php/forms/add/rapid.php', true)">Add Rapid</a></li>
-								<li><a onclick="loadForm('app/php/forms/add/run.php', false, 'gauge')">Add Run</a></li>
+								<li><a onclick="loadForm('/app/php/forms/add/river.php', false)">Add River</a></li>
+								<li><a onclick="loadForm('/app/php/forms/add/marker.php', true)">Add Marker</a></li>
+								<li><a onclick="loadForm('/app/php/forms/add/playspot.php', true, 'gauge')">Add Playspot</a></li>
+								<li><a onclick="loadForm('/app/php/forms/add/rapid.php', true)">Add Rapid</a></li>
+								<li><a onclick="loadForm('/app/php/forms/add/run.php', false, 'gauge')">Add Run</a></li>
 								<li class="divider"></li>
 								<li><!--<a onclick="loadForm('app/php/forms/add/video.php', false, 'media')">--><a href="#" class="disabled">Add Video</a></li>
 								<li><!--<a onclick="loadForm('app/php/forms/add/photo.php', false, 'media')">--><a href="#" class="disabled">Add Photo</a></li>
 								<li class="divider"></li>
-								<li><a href="app/php/actions/log-out.php">Log out</a></li>
+								<li><a href="https://github.com/apexskier/rivers/issues/new" target="_blank">Submit a Bug</a></li>
+								<li><a href="/app/php/actions/log-out.php">Log out</a></li>
 							<?php else: ?>
 								<li><a onclick="loadRegistration()">Sign Up</a></li>
-								<li><a onclick="loadForm('app/php/forms/log-in.php', false)">Sign In</a></li>
+								<li><a onclick="loadForm('/app/php/forms/log-in.php', false)">Sign In</a></li>
+								<li class="divider"></li>
+								<li><a href="https://github.com/apexskier/rivers/issues/new" target="_blank">Submit a Bug</a></li>
 							<?php endif; ?>
 						</ul>
 					</li>
@@ -90,14 +93,14 @@
 				<ul class="nav">
 					<li><a href="http://camlittle.com" target="_blank">by Cameron Little</a></li>
 					<li><a href="https://github.com/apexskier/rivers" target="_blank">Project Code</a></li>
-					<li><a href="https://github.com/apexskier/rivers/issues/new" target="_blank">Submit a Bug</a></li>
+					<li><a href="#">Status: <span class="status"></span></a></li>
 				</ul>
 				<ul class="nav pull-right">
 					<li class="divider-vertical"></li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"><i class="icon-cog"></i> Map Options <b class="caret"></b></a>
 						<ul class="dropdown-menu controls" role="menu">
-							<li><a href="#">Nothing here yet...</a></li>
+							<li><a class="map-link" href="#">Permalink to current page</a></li>
 							<!--<li>
 								<label class="checkbox" name="gauges-control">
 								<input type="checkbox" onclick="showByType(this, gauges_markers_array, 11)" name="gauges-control">Show all gauges</label>
@@ -130,19 +133,43 @@
 <!-- JavaScript at the bottom for fast page loading -->
 <!-- 3rd party javascript libraries -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="app/js/libs/jquery-1.8.0.min.js"><\/script>')</script>
-<script type="text/javascript" src="app/js/libs/jquery-ui-1.8.23.custom.min.js"></script>
+<script>window.jQuery || document.write('<script src="/app/js/libs/jquery-1.8.0.min.js"><\/script>')</script>
+<script type="text/javascript" src="/app/js/libs/jquery-ui-1.8.23.custom.min.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
-<script type="text/javascript" src="app/js/libs/bootstrap.min.js"></script>
-<script type="text/javascript" src="app/js/libs/mustache.js"></script>
+<script type="text/javascript" src="/app/js/libs/bootstrap.min.js"></script>
+<script type="text/javascript" src="/app/js/libs/mustache.js"></script>
 
 <!-- scripts concatenated and minified via build script -->
-<script type="text/javascript" src="app/js/ui.js"></script>
-<script type="text/javascript" src="app/js/main.js"></script>
-<script type="text/javascript" src="app/js/templates/content.js"></script>
-<script type="text/javascript" src="app/js/load_json.js"></script>
+<script type="text/javascript" src="/app/js/main.js"></script>
+<script type="text/javascript" src="/app/js/templates/content.js"></script>
+<script type="text/javascript" src="/app/js/load_json.js"></script>
 
 <script type="text/javascript">
-initialize();
+<?php
+$lat = $_GET['lat'];
+$lng = $_GET['lng'];
+$zoom = $_GET['zoom'];
+$type = $_GET['type'];
+$id = $_GET['id'];
+
+if ($lat == null) {
+	$lat = "null";
+}
+if ($lng == null) {
+	$lng = "null";
+}
+if ($zoom == null) {
+	$zoom = "null";
+}
+if ($type == null) {
+	$type = "null";
+}
+if ($id == null) {
+	$id = "null";
+}
+
+echo "initialize($lat, $lng, $zoom, '$type', $id)";
+?>
+
 </script>
 <!-- end scripts -->

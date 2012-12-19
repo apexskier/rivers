@@ -15,7 +15,7 @@ require($_SERVER['DOCUMENT_ROOT'] . "/app/php/database.php");
 		 More info: h5bp.com/i/378 -->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width">
-	<link type="text/css" rel="stylesheet" href="app/css/h5bp-style.css" />
-	<link type="text/css" rel="stylesheet" href="app/css/ui-lightness/jquery-ui-1.8.23.custom.css" />
-	<link type="text/css" rel="stylesheet" href="app/css/bootstrap.min.css" />
-	<link type="text/css" rel="stylesheet" href="app/css/style.css" />
+	<link type="text/css" rel="stylesheet" href="/app/css/h5bp-style.css" />
+	<link type="text/css" rel="stylesheet" href="/app/css/ui-lightness/jquery-ui-1.8.23.custom.css" />
+	<link type="text/css" rel="stylesheet" href="/app/css/bootstrap.min.css" />
+	<link type="text/css" rel="stylesheet" href="/app/css/style.css" />

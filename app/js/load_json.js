@@ -3,7 +3,7 @@
 */
 var standard_icon_size = new google.maps.Size(28, 28);
 var standard_icon_anchor = new google.maps.Point(14, 14);
-var icon_img = 'app/img/icons-sprite.png';
+var icon_img = '/app/img/icons-sprite.png';
 var river_access_icon = new google.maps.MarkerImage(
 	icon_img,
 	new google.maps.Size(29, 27),
@@ -175,7 +175,7 @@ var all_map_objects = [rapids_markers_array, markers_markers_array, gauges_marke
 function setMarkerClick(marker) {
 	function markerCase() {
 		google.maps.event.addListener(marker, 'click', function() {
-			$('.content').html(Mustache.to_html(marker_template, json_markers_array[this.id]));
+			$('.content').html(Mustache.to_html(marker_template, json_markers_array[this.id])).removeClass('overflowing');
 			pullContent();
 		});
 	}
@@ -203,13 +203,13 @@ function setMarkerClick(marker) {
 			break;
 		case "rapid":
 			google.maps.event.addListener(marker, 'click', function() {
-				$('.content').html(Mustache.to_html(rapid_template, json_rapids_array[this.id]));
+				$('.content').html(Mustache.to_html(rapid_template, json_rapids_array[this.id])).removeClass('overflowing');
 				pullContent();
 			});
 			break;
 		case "gauge":
 			google.maps.event.addListener(marker, 'click', function() {
-				$('.content').html(Mustache.to_html(gauge_template, json_gauges_array[this.id]));
+				$('.content').html(Mustache.to_html(gauge_template, json_gauges_array[this.id])).removeClass('overflowing');
 				pullContent();
 			});
 			break;
@@ -220,7 +220,7 @@ function setMarkerClick(marker) {
 					content = content + Mustache.to_html(items_gauge_template, json_gauges_array[this.gauge_id]);
 				}
 				content = content + Mustache.to_html(run_template2, json_runs_array[this.id]);
-				$('.content').html(content);
+				$('.content').html(content).removeClass('overflowing');
 				pullContent();
 			});
 			break;
@@ -234,7 +234,7 @@ function setMarkerClick(marker) {
 					content = content + Mustache.to_html(items_gauge_template, json_gauges_array[playspot_gauge[0].id]);
 				}
 				content = content + Mustache.to_html(playspot_template2, json_playspots_array[this.id]);
-				$('.content').html(content);
+				$('.content').html(content).removeClass('overflowing');
 				pullContent();
 			});
 			break;
@@ -264,49 +264,7 @@ function createMarker(data, icon) {
 }
 
 $(document).ready(function() {
-	$.getJSON('app/json/runs.json.php', function(runs) {
-		$.each(runs, function(key, run) {
-			var run_color = "hsl(0, 0%, 0%)";
-			
-			var run_path = [];
-			var run_points;
-			var run_path_url = 'app/json/run_points/run_' + run.database_id + '.json';
-			$.getJSON(run_path_url, function(points) {
-				run_points = points;
-				$.each(points, function(key, point) {
-					run_path.push(new google.maps.LatLng(point.lat, point.lng));
-				});
-			
-				var new_polyline = new google.maps.Polyline({
-					id: run.id,
-					map: map,
-					strokeColor: run_color,
-					strokeOpacity: 0.75,
-					strokeWeight: 8,
-					title: run.name,
-					gauge_id: run.gauge.id,
-					gauge_min: run.gauge.min,
-					gauge_max: run.gauge.max,
-					type: run.type,
-					path: run_path
-				});
-				
-				google.maps.event.addListener(new_polyline, 'mouseover', function() {
-					this.setOptions({ strokeOpacity: 1.0 });
-				});
-				google.maps.event.addListener(new_polyline, 'mouseout', function() {
-					this.setOptions({ strokeOpacity: 0.75 });
-				});
-				
-				setMarkerClick(new_polyline);
-				runs_polyline_array.push(new_polyline);
-			});
-		});
-		json_runs_array = runs;
-		console.log("Runs loaded");
-	});
-	
-	$.getJSON('app/json/gauges.json.php', function(gauges) {
+	$.getJSON('/app/json/gauges.json.php', function(gauges) {
 		$.each(gauges, function(key, gauge) {
 			var new_gauge = createMarker(gauge, "gauge");
 			setMarkerClick(new_gauge);
@@ -316,7 +274,7 @@ $(document).ready(function() {
 		console.log("Gauges loaded");
 		showByZoom();
 		
-		$.getJSON('app/json/playspots.json.php', function(playspots) {
+		$.getJSON('/app/json/playspots.json.php', function(playspots) {
 			$.each(playspots, function(key, playspot) {
 				var new_playspot = createMarker(playspot, "playspot");
 				setMarkerClick(new_playspot);
@@ -327,49 +285,85 @@ $(document).ready(function() {
 			console.log("Playspots loaded");
 		});
 		
-		$.each(runs_polyline_array, function(key, run) {
-			var run_color = "hsl(0, 0%, 0%)",
-			    hue;
-			    
-			var run_gauge = $.grep(json_gauges_array, function(gauge) {
-				return gauge.database_id == run.gauge_id;
-			});
-			var gauge_id = null;
-			
-			if (run_gauge.length > 0) {
-				gauge_id = run_gauge[0].id;
-				var flow = +run_gauge[0].current_flow;
-				var flow_min = +run.gauge_min;
-				var flow_max = +run.gauge_max;
-				if (flow > flow_min
-				 && flow < flow_max) {
-					hue = flow * 240 / flow_max;
-					run_color = "hsl(" + hue + ", 80%, 50%)";
-				} else if (flow <= flow_min) {
-					run_color = "hsl(0, 80%, 50%)"; // red
-				} else if (flow >= flow_max) {
-					run_color = "hsl(240, 80%, 50%)"; // blue
-				} else if (flow_min == 0
-				 || flow_max == 0
-				 || flow_min >= flow_max) {
-					run_color = "hsl(0, 0%, 0%)"; // black
-				} else {
-					run_color = "hsl(0, 0%, 0%)"; // black
-				}
+		$.getJSON('/app/json/runs.json.php', function(runs) {
+			$.each(runs, function(key, run) {
+				var run_color = "hsl(0, 0%, 0%)";
 				
-				run.setOptions({strokeColor: run_color});
-			}
-			run.setOptions({gauge_id: gauge_id});
+				var run_path = [];
+				var run_points;
+				var run_path_url = '/app/json/run_points/run_' + run.database_id + '.json';
+				$.getJSON(run_path_url, function(points) {
+					run_points = points;
+					$.each(points, function(key, point) {
+						run_path.push(new google.maps.LatLng(point.lat, point.lng));
+					});
+					
+					var run_gauge = $.grep(json_gauges_array, function(gauge) {
+						return gauge.database_id == run.gauge.id;
+					});
+					
+					var gauge_id = null;
+					
+					if (run_gauge.length > 0) {
+						gauge_id = run_gauge[0].id;
+						var flow = +run_gauge[0].current_flow;
+						var flow_min = +run.gauge.min;
+						var flow_max = +run.gauge.max;
+						if (flow > flow_min
+						 && flow < flow_max) {
+							hue = flow * 240 / flow_max;
+							run_color = "hsl(" + hue + ", 80%, 50%)";
+						} else if (flow <= flow_min) {
+							run_color = "hsl(0, 80%, 50%)"; // red
+						} else if (flow >= flow_max) {
+							run_color = "hsl(240, 80%, 50%)"; // blue
+						} else if (flow_min == 0
+						 || flow_max == 0
+						 || flow_min >= flow_max) {
+							run_color = "hsl(0, 0%, 0%)"; // black
+						} else {
+							run_color = "hsl(0, 0%, 0%)"; // black
+						}
+					}
+					
+					var new_polyline = new google.maps.Polyline({
+						id: run.id,
+						map: map,
+						strokeColor: run_color,
+						strokeOpacity: 0.75,
+						strokeWeight: 8,
+						title: run.name,
+						gauge_id: gauge_id,
+						gauge_min: run.gauge.min,
+						gauge_max: run.gauge.max,
+						type: run.type,
+						path: run_path
+					});
+					
+					google.maps.event.addListener(new_polyline, 'mouseover', function() {
+						this.setOptions({ strokeOpacity: 1.0 });
+					});
+					google.maps.event.addListener(new_polyline, 'mouseout', function() {
+						this.setOptions({ strokeOpacity: 0.75 });
+					});
+					
+					setMarkerClick(new_polyline);
+					runs_polyline_array.push(new_polyline);
+				});
+			});
+			json_runs_array = runs;
+			console.log("Runs loaded");
 		});
-		console.log("Run colors updated");
 	});
 	
-	$.getJSON('app/json/rivers.json.php', function(rivers) {
+	
+	
+	$.getJSON('/app/json/rivers.json.php', function(rivers) {
 		json_rivers_array = rivers;
 		console.log("Rivers loaded");
 	});
 	
-	$.getJSON('app/json/rapids.json.php', function(rapids) {
+	$.getJSON('/app/json/rapids.json.php', function(rapids) {
 		$.each(rapids, function(key, rapid) {
 			var new_marker = createMarker(rapid, rapid.rating);
 			setMarkerClick(new_marker);
@@ -380,7 +374,7 @@ $(document).ready(function() {
 		showByZoom();
 	});
 	
-	$.getJSON('app/json/markers.json.php', function(markers) {
+	$.getJSON('/app/json/markers.json.php', function(markers) {
 		$.each(markers, function(key, marker) {
 			var new_marker = createMarker(marker, marker.type);
 			setMarkerClick(new_marker);

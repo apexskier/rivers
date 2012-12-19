@@ -14,8 +14,9 @@
 	if (!strpos($printable_river_name, "River") && !strpos($printable_river_name, "Creek")) {
 		$printable_river_name .= " River";
 	}
-?>
-<?php
+	
+	
+	
 	echo "<h2>" . $printable_river_name . "</h2>";
 	
 	$gauges_query = mysql_query("SELECT * FROM gauges WHERE river = $river_id");
@@ -96,5 +97,6 @@
 		echo "</li>";
 	}
 	echo "</ul>";
+	
+	mysql_close($link);
 ?>
-<?php mysql_close($link); ?>

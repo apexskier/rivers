@@ -45,12 +45,16 @@ body {
 .main-container {
 	position: relative;
 	height: 0;
-	overflow: scroll;
 }
 #main {
-	padding: 10px 20px 0px;
+	padding: 10px 20px 15px;
 	height: auto;
-	overflow: scroll;
+}
+.content.open {
+	margin-bottom: 15px;
+}
+.content.overflowing {
+	margin-bottom: 60px;
 }
 
 #recaptcha {

@@ -1,5 +1,5 @@
 <h3>Register</h3>
-<form id="register" name="register" method="post" action="app/php/actions/register.php">
+<form id="register" name="register" method="post" action="/app/php/actions/register.php">
 	<label name="fname">First Name</label>
 	<input type="text" name="fname" required>
 	<label name="lname">Last Name</label>

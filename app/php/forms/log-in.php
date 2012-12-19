@@ -1,5 +1,5 @@
 <h3>Log In</h3>
-<form id="register" name="register" method="post" action="app/php/actions/log-in.php">
+<form id="register" name="register" method="post" action="/app/php/actions/log-in.php">
 	<label name="username">Username</label>
 	<input type="text" name="username" required>
 	

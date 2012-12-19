@@ -15,8 +15,10 @@ while ($run = mysql_fetch_array($query)) {
 		$run_name = $run['run_name'];
 	}
 	
+	$run_id = "run_" . $run['id'];
+	$points_file_name = $_SERVER['DOCUMENT_ROOT'] . "/app/json/run_points/" . $run_id . ".json";
+
 	if (!file_exists($points_file_name)) {
-		$run_id = "run_" . $run['id'];
 		$points_query = mysql_query("SELECT * FROM $run_id");
 		$points = array();
 		while ($point = mysql_fetch_array($points_query)) {
@@ -25,7 +27,6 @@ while ($run = mysql_fetch_array($query)) {
 			array_push($points, $lat_lng);
 		}
 		
-		$points_file_name = $_SERVER['DOCUMENT_ROOT'] . "/app/json/run_points/" . $run_id . ".json";
 		$points_file = fopen($points_file_name, 'w');
 		fwrite($points_file, json_encode($points));
 		fclose($points_file);
