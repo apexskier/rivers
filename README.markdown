@@ -10,8 +10,8 @@ A resource for kayakers and rafters showing location accurate river runs, gauges
 
 - Photo uploads (soon)
 - Videos (soon)
-- Caching
-- Dynamic loading of content based on location and zoom level
+- Caching (in progress)
+- Dynamic loading of content based on location and zoom level (in progress)
 - Asynchronous adding
 - Asynchronous editing
 - More user information/options
