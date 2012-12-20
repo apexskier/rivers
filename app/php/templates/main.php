@@ -16,6 +16,7 @@
 					<?php if ($logged_in): ?><li><a href="#"><?php echo "Welcome, " . $_SESSION['SESS_FIRST_NAME']; ?></a></li><?php endif; ?>
 				</ul>
 				<ul class="nav pull-right">
+					<li><a href="#" onclick="goToMe()" title="Go to my position"><i class="icon-screenshot"></i></a></li>
 					<li class="divider-vertical"></li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"><i class="icon-user"></i> User tools <b class="caret"></b></a>

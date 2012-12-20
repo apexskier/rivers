@@ -6,6 +6,10 @@ var centerMarker = new google.maps.Marker({
 	map: null,
 	title: "Spot picked"
 });
+var myPos = new google.maps.Marker({
+	map: null,
+	title: "You are here"
+});
 var showGaugesBool = false,
     showPlayspotsBool = false,
     showMarkersBool = false,
@@ -16,38 +20,29 @@ window.onresize = function(e) {
 	setMapHeight();
 }
 
+var all_markers_array = {};
+var all_rapids_array = {};
+var locations_loaded = {};
+
 function initialize(lat, lng, zoom, type, id) { // on body load
 	var mapOptions = {
 		zoom: 11,
 		mapTypeId: google.maps.MapTypeId.TERRAIN,
+		center: new google.maps.LatLng(48.118146, -123.430741)
 	};
 	map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
 	console.log('Map loaded');
-	google.maps.event.addListener(map, 'zoom_changed', function() {
-		showByZoom();
-		setMapLink();
-	});
-	google.maps.event.addListener(map, 'center_changed', function() {
-		setMapLink();
-	});
-	function setMapLink() {
-		var center = map.getCenter();
-		var currentURL = "/" + (Math.round(center.lat() * 1000000000)/1000000000) + "/" + (Math.round(center.lng() * 1000000000)/1000000000) + "/" + map.getZoom();
-		$('.map-link').attr("href", "http://rivers.camlittle.com" + currentURL);
-		window.history.replaceState("", "", currentURL);
+	
+	if(navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position) {
+			var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+			myPos.setMap(map);
+			myPos.setPosition(pos);
+		});
 	}
 	
 	if (lat == null || lng == null) {
-		// Try HTML5 geolocation
-		if(navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function(position) {
-				var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-				map.setCenter(pos);
-			});
-		} else {
-			// Browser doesn't support Geolocation
-			map.setCenter(new google.maps.LatLng(48.118146, -123.430741));
-		}
+		goToMe();
 	} else {
 		map.setCenter(new google.maps.LatLng(lat, lng));
 		if (zoom != null) {
@@ -58,6 +53,28 @@ function initialize(lat, lng, zoom, type, id) { // on body load
 	callOnInitialize();
 }
 
+function goToMe() {
+	// Try HTML5 geolocation
+	if(navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position) {
+			var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+			map.panTo(pos);
+			myPos.setMap(map);
+			myPos.setPosition(pos);
+			setMapLink();
+		});
+	} else {
+		// Browser doesn't support Geolocation
+		alert("We can't seem to find you!");
+	}
+}
+
+function setMapLink() {
+	var center = map.getCenter();
+	var currentURL = "/" + (Math.round(center.lat() * 1000000000)/1000000000) + "/" + (Math.round(center.lng() * 1000000000)/1000000000) + "/" + map.getZoom();
+	$('.map-link').attr("href", "http://rivers.camlittle.com" + currentURL);
+	window.history.replaceState("", "", currentURL);
+}
 
 /*function showAddress(address) {
 	geocoder.geocode( { 'address': address }, function(results, status) {
@@ -80,6 +97,54 @@ function initialize(lat, lng, zoom, type, id) { // on body load
 	
 function callOnInitialize() {
 	setMapHeight();
+	
+	google.maps.event.addListener(map, 'zoom_changed', function() {
+		showByZoom();
+		setMapLink();
+		var southwest_lat = parseInt(map.getBounds().getSouthWest().lat());
+		var southwest_lng = parseInt(map.getBounds().getSouthWest().lng());
+		var northeast_lat = parseInt(map.getBounds().getNorthEast().lat());
+		var northeast_lng = parseInt(map.getBounds().getNorthEast().lng());
+		for (var lat = southwest_lat; lat <= northeast_lat; lat++) {
+			for (var lng = southwest_lng; lng <= northeast_lng; lng++) {
+				getMarkersAroundCenter(lat, lng);
+			}
+		}
+	});
+	$('#map_canvas').mouseup(function() {
+		setMapLink();
+		var southwest_lat = parseInt(map.getBounds().getSouthWest().lat());
+		var southwest_lng = parseInt(map.getBounds().getSouthWest().lng());
+		var northeast_lat = parseInt(map.getBounds().getNorthEast().lat());
+		var northeast_lng = parseInt(map.getBounds().getNorthEast().lng());
+		for (var lat = southwest_lat; lat <= northeast_lat; lat++) {
+			for (var lng = southwest_lng; lng <= northeast_lng; lng++) {
+				getMarkersAroundCenter(lat, lng);
+			}
+		}
+	});
+	
+	$('.status').ajaxStart(function() {
+		$(this).html('Loading<span class="dots"></span>');
+		animateLoad();
+	});
+	function animateLoad() {
+		var text = '....';
+		jQuery({count:0}).animate({count:text.length}, {
+			duration: 2000,
+			step: function() {
+				$(".dots").text( text.substring(0, Math.round(this.count)) );
+			},
+			complete: function() {
+				animateLoad();
+			}
+		});
+	}
+	
+	$('.status').ajaxStop(function() {
+		$(this).html('Resources loaded.');
+	});
+	
 	$('.minimize').click(function() {
 		minimize();
 	});
@@ -137,7 +202,7 @@ function showByZoom() {
 	
 	setByZoom(gaugeZoomThreshold, gauges_markers_array);
 	setByZoom(playspotZoomThreshold, playspots_markers_array);
-	setByZoom(markerZoomThreshold, markers_markers_array);
+	setByZoom(markerZoomThreshold, river_markers_array);
 	setByZoom(rapidZoomThreshold, rapids_markers_array);
 	
 	function setByZoom(threshold, array) {

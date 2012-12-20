@@ -96,7 +96,11 @@
 						}
 						session_write_close();
 						mysql_close($link);
-						header('Location: http://rivers.camlittle.com/');
+						if (isset($_SERVER['HTTP_REFERER'])) {
+							header('Location: ' . $_SERVER['HTTP_REFERER']);
+						} else {
+							header('Location: http://rivers.camlittle.com/');
+						}
 						exit();
 					} else {
 						$errmsg_arr[] = "Error: " . mysql_error();
