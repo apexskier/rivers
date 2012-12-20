@@ -6,9 +6,18 @@ var centerMarker = new google.maps.Marker({
 	map: null,
 	title: "Spot picked"
 });
+var icon_img = '/app/img/icons-sprite.png';
+
+var myPos_icon = new google.maps.MarkerImage(
+	icon_img,
+	new google.maps.Size(32, 32),
+	new google.maps.Point(56, 131),
+	new google.maps.Point(16, 16)
+);
 var myPos = new google.maps.Marker({
 	map: null,
-	title: "You are here"
+	title: "You are here",
+	icon: myPos_icon
 });
 var showGaugesBool = false,
     showPlayspotsBool = false,

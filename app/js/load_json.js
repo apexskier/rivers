@@ -3,7 +3,6 @@
 */
 var standard_icon_size = new google.maps.Size(28, 28);
 var standard_icon_anchor = new google.maps.Point(14, 14);
-var icon_img = '/app/img/icons-sprite.png';
 var river_access_icon = new google.maps.MarkerImage(
 	icon_img,
 	new google.maps.Size(29, 27),
