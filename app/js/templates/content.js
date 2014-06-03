@@ -9,7 +9,7 @@ var playspot_meta_template = ' - {{#gauge}}{{#active}}In at {{min}} to {{max}}{{
 
 var description_template = '<p>{{{description}}}</p>';
 
-var meta_template = '<p class="muted"><small>Added by <a onclick="loadUser(\'{{created_user}}\')">{{created_user}}</a> on {{created_date}}.{{#updated_user}} Updated by <a href="loadUser(\'{{updated_user}}\')">{{updated_user}}</a> by {{updated_date}}.{{/updated_user}}</small></p> <p class="edit"><button class="btn btn-small submit" onclick="edit(\'{{type}}\', {{id}})">Edit {{type}}</button></p> ';
+var meta_template = '<p class="muted"><small>Added by <a onclick="loadUser(\'{{created_user}}\')">{{created_user}}</a> on {{created_date}}.{{#updated_user}} Updated by <a href="loadUser(\'{{updated_user}}\')">{{updated_user}}</a> by {{updated_date}}.{{/updated_user}}</small></p> <p class="edit"><button class="btn btn-small submit" onclick="edit(\'{{type}}\', {{database_id}})">Edit {{type}}</button></p> ';
 
 var rapid_template     = meta_start + rapid_meta_template + description_template + meta_template;
 var marker_template    = meta_start + marker_meta_template + description_template + meta_template;

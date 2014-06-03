@@ -9,5 +9,10 @@
 	
 	$_SESSION['SUCCESS'] = "Logged out.";
 	session_write_close();
-	header('Location: http://rivers.camlittle.com/');
+	
+	if (isset($_SERVER['HTTP_REFERER'])) {
+		header('Location: ' . $_SERVER['HTTP_REFERER']);
+	} else {
+		header('Location: http://rivers.camlittle.com/');
+	}
 ?>

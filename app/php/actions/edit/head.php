@@ -10,14 +10,22 @@
 		$errmsg_arr[] = "Not logged in.";
 		$_SESSION['ERRMSG_ARR'] = $errmsg_arr;
 		session_write_close();
-		header('Location: http://rivers.camlittle.com/');
+		if (isset($_SERVER['HTTP_REFERER'])) {
+			header('Location: ' . $_SERVER['HTTP_REFERER']);
+		} else {
+			header('Location: http://rivers.camlittle.com/');
+		}
 		exit();
 	}
 	
 	function onError() {
 		$_SESSION['ERRMSG_ARR'] = $errmsg_arr;
 		session_write_close();
-		header('Location: http://rivers.camlittle.com/');
+		if (isset($_SERVER['HTTP_REFERER'])) {
+			header('Location: ' . $_SERVER['HTTP_REFERER']);
+		} else {
+			header('Location: http://rivers.camlittle.com/');
+		}
 		exit();
 	}
 	
@@ -32,7 +40,11 @@
 					$_SESSION['SUCCESS'] = "Successfully updated $type.";
 					session_write_close();
 					mysql_close($link);
-					header('Location: http://rivers.camlittle.com/');
+					if (isset($_SERVER['HTTP_REFERER'])) {
+						header('Location: ' . $_SERVER['HTTP_REFERER']);
+					} else {
+						header('Location: http://rivers.camlittle.com/');
+					}
 					exit();
 				} else {
 					$errmsg_arr[] = "Error updating cache times in database: " . mysql_error();

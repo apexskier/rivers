@@ -16,6 +16,7 @@
 					<?php if ($logged_in): ?><li><a href="#"><?php echo "Welcome, " . $_SESSION['SESS_FIRST_NAME']; ?></a></li><?php endif; ?>
 				</ul>
 				<ul class="nav pull-right">
+					<li><a href="#" onclick="goToMe()" title="Go to my position"><i class="icon-screenshot"></i></a></li>
 					<li class="divider-vertical"></li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"><i class="icon-user"></i> User tools <b class="caret"></b></a>
@@ -72,7 +73,9 @@
 		<?php if (!$logged_in): ?>
 		<div class="alert alert-info">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
-			Colors indicate if a river is running, zoom in to see more.
+			Colors indicate if a river is running: black is no gauge information, red is too low, blue is too high, the spectrum in between is varying levels of running.<br><br>
+			Zoom in to see more, click to get more information.<br><br>
+			If nothing is showing up, check the status bar below.
 		</div>
 		<?php endif; ?>
 	</div>
@@ -91,17 +94,16 @@
 		<div class="navbar-inner">
 			<div class="container">
 				<ul class="nav">
-					<li><a href="http://camlittle.com" target="_blank">by Cameron Little</a></li>
-					<li><a href="https://github.com/apexskier/rivers" target="_blank">Project Code</a></li>
 					<li><a href="#">Status: <span class="status"></span></a></li>
 				</ul>
 				<ul class="nav pull-right">
-					<li class="divider-vertical"></li>
+					<li><a href="http://camlittle.com" target="_blank">by Cameron Little</a></li>
+				<!--	<li class="divider-vertical"></li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"><i class="icon-cog"></i> Map Options <b class="caret"></b></a>
 						<ul class="dropdown-menu controls" role="menu">
 							<li><a class="map-link" href="#">Permalink to current page</a></li>
-							<!--<li>
+							<li>
 								<label class="checkbox" name="gauges-control">
 								<input type="checkbox" onclick="showByType(this, gauges_markers_array, 11)" name="gauges-control">Show all gauges</label>
 							</li>
@@ -116,9 +118,9 @@
 							<li>
 								<label class="checkbox" name="markers-control">
 								<input type="checkbox" onclick="showByType(this, markers_markers_array, 12)" name="markers-control">Show all markers</label>
-							</li>-->
+							</li>
 						</ul>
-					</li>
+					</li>-->
 				</ul>
 			</div>
 		</div>

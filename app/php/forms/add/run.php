@@ -1,5 +1,5 @@
 <h3>Add a run</h3>
-<form name="add-run" action="app/php/actions/add/run.php" method="post" enctype="multipart/form-data">
+<form name="add-run" action="/app/php/actions/add/run.php" method="post" enctype="multipart/form-data">
 	<label name="run_name">Name</label>
 	<input type="text" name="run_name">
 	

@@ -3,7 +3,6 @@
 */
 var standard_icon_size = new google.maps.Size(28, 28);
 var standard_icon_anchor = new google.maps.Point(14, 14);
-var icon_img = '/app/img/icons-sprite.png';
 var river_access_icon = new google.maps.MarkerImage(
 	icon_img,
 	new google.maps.Size(29, 27),
@@ -156,8 +155,9 @@ function return_icon(type) {
 var json_rivers_array = [];
 
 var rapids_markers_array = [];
-var json_rapids_array = [];
+var json_rapids_array = {};
 
+var river_markers_array = [];
 var markers_markers_array = [];
 var json_markers_array = [];
 
@@ -170,12 +170,12 @@ var json_runs_array = [];
 var playspots_markers_array = [];
 var json_playspots_array = [];
 
-var all_map_objects = [rapids_markers_array, markers_markers_array, gauges_markers_array, runs_polyline_array, playspots_markers_array];
+var all_map_objects = [rapids_markers_array, river_markers_array, gauges_markers_array, runs_polyline_array, playspots_markers_array];
 
 function setMarkerClick(marker) {
 	function markerCase() {
 		google.maps.event.addListener(marker, 'click', function() {
-			$('.content').html(Mustache.to_html(marker_template, json_markers_array[this.id])).removeClass('overflowing');
+			$('.content').html(Mustache.to_html(marker_template, json_markers_array[this.database_id])).removeClass('overflowing');
 			pullContent();
 		});
 	}
@@ -203,7 +203,7 @@ function setMarkerClick(marker) {
 			break;
 		case "rapid":
 			google.maps.event.addListener(marker, 'click', function() {
-				$('.content').html(Mustache.to_html(rapid_template, json_rapids_array[this.id])).removeClass('overflowing');
+				$('.content').html(Mustache.to_html(rapid_template, json_rapids_array[this.database_id])).removeClass('overflowing');
 				pullContent();
 			});
 			break;
@@ -215,11 +215,11 @@ function setMarkerClick(marker) {
 			break;
 		case "run":
 			google.maps.event.addListener(marker, 'click', function() {
-				var content = Mustache.to_html(run_template1, json_runs_array[this.id]);
+				var content = Mustache.to_html(run_template1, json_runs_array[this.database_id]);
 				if (this.gauge_id != null) {
 					content = content + Mustache.to_html(items_gauge_template, json_gauges_array[this.gauge_id]);
 				}
-				content = content + Mustache.to_html(run_template2, json_runs_array[this.id]);
+				content = content + Mustache.to_html(run_template2, json_runs_array[this.database_id]);
 				$('.content').html(content).removeClass('overflowing');
 				pullContent();
 			});
@@ -229,11 +229,11 @@ function setMarkerClick(marker) {
 				var playspot_gauge = $.grep(json_gauges_array, function(gauge) {
 					return gauge.database_id == this.gauge_id;
 				});
-				var content = Mustache.to_html(playspot_template1, json_playspots_array[this.id]);
+				var content = Mustache.to_html(playspot_template1, json_playspots_array[this.database_id]);
 				if (playspot_gauge.length > 0) {
 					content = content + Mustache.to_html(items_gauge_template, json_gauges_array[playspot_gauge[0].id]);
 				}
-				content = content + Mustache.to_html(playspot_template2, json_playspots_array[this.id]);
+				content = content + Mustache.to_html(playspot_template2, json_playspots_array[this.database_id]);
 				$('.content').html(content).removeClass('overflowing');
 				pullContent();
 			});
@@ -254,13 +254,42 @@ function createMarker(data, icon) {
 		database_id: data.database_id,
 		type: data.type,
 		position: new google.maps.LatLng(data.lat, data.lng),
-		map: null,
+		map: map,
 		title: data.name,
 		gauge_id: gauge_id,
 		icon: this_icon,
 	});
 	
 	return new_marker;
+}
+
+function getMarkersAroundCenter(lat, lng) {
+	var loc = lat + "_" + lng;
+	if (typeof locations_loaded[loc] === 'undefined') {
+		locations_loaded[loc] = true;
+		var loc_url = '/app/json/by_loc/markers.json.php?lat=' + lat + '&lng=' + lng;
+		$.getJSON(loc_url, function(markers) {
+			$.each(markers, function(key, marker) {
+				var new_marker = createMarker(marker, marker.type);
+				setMarkerClick(new_marker);
+				river_markers_array.push(new_marker);
+				json_markers_array[marker.database_id] = marker;
+			});
+			
+			var loc_url = '/app/json/by_loc/rapids.json.php?lat=' + lat + '&lng=' + lng;
+			$.getJSON(loc_url, function(rapids) {
+				$.each(rapids, function(key, rapid) {
+					var new_marker = createMarker(rapid, rapid.rating);
+					setMarkerClick(new_marker);
+					rapids_markers_array.push(new_marker);
+					json_rapids_array[rapid.database_id] = rapid;
+				});
+				showByZoom();
+				console.log("Markers for (" + lat + ", " + lng + ") loaded");
+			});
+			
+		});
+	}
 }
 
 $(document).ready(function() {
@@ -279,9 +308,9 @@ $(document).ready(function() {
 				var new_playspot = createMarker(playspot, "playspot");
 				setMarkerClick(new_playspot);
 				playspots_markers_array.push(new_playspot);
+				json_playspots_array[playspot.database_id] = playspot;
 				showByZoom();
 			});
-			json_playspots_array = playspots;
 			console.log("Playspots loaded");
 		});
 		
@@ -311,7 +340,7 @@ $(document).ready(function() {
 						var flow_max = +run.gauge.max;
 						if (flow > flow_min
 						 && flow < flow_max) {
-							hue = flow * 240 / flow_max;
+							hue = (flow - flow_min) * 240 / (flow_max - flow_min);
 							run_color = "hsl(" + hue + ", 80%, 50%)";
 						} else if (flow <= flow_min) {
 							run_color = "hsl(0, 80%, 50%)"; // red
@@ -328,6 +357,7 @@ $(document).ready(function() {
 					
 					var new_polyline = new google.maps.Polyline({
 						id: run.id,
+						database_id: run.database_id,
 						map: map,
 						strokeColor: run_color,
 						strokeOpacity: 0.75,
@@ -349,21 +379,19 @@ $(document).ready(function() {
 					
 					setMarkerClick(new_polyline);
 					runs_polyline_array.push(new_polyline);
+					json_runs_array[run.database_id] = run;
 				});
 			});
-			json_runs_array = runs;
 			console.log("Runs loaded");
 		});
 	});
 	
-	
-	
-	$.getJSON('/app/json/rivers.json.php', function(rivers) {
+	/*$.getJSON('/app/json/rivers.json.php', function(rivers) {
 		json_rivers_array = rivers;
 		console.log("Rivers loaded");
-	});
+	});*/
 	
-	$.getJSON('/app/json/rapids.json.php', function(rapids) {
+	/*$.getJSON('/app/json/rapids.json.php', function(rapids) {
 		$.each(rapids, function(key, rapid) {
 			var new_marker = createMarker(rapid, rapid.rating);
 			setMarkerClick(new_marker);
@@ -372,16 +400,28 @@ $(document).ready(function() {
 		json_rapids_array = rapids;
 		console.log("Rapids loaded");
 		showByZoom();
-	});
+	});*/
 	
-	$.getJSON('/app/json/markers.json.php', function(markers) {
+	$.getJSON('/app/json/hash/markers.json.php', function(markers) {
 		$.each(markers, function(key, marker) {
-			var new_marker = createMarker(marker, marker.type);
-			setMarkerClick(new_marker);
-			markers_markers_array.push(new_marker);
+			all_markers_array[marker.database_id] = marker.loc;
 		});
-		json_markers_array = markers;
-		console.log("Markers loaded");
-		showByZoom();
+		console.log("All markers loaded");
+		
+		$.getJSON('/app/json/hash/rapids.json.php', function(rapids) {
+			$.each(rapids, function(key, rapid) {
+				all_rapids_array[rapid.database_id] = rapid.loc;
+			});
+			console.log("All rapids loaded");
+			var southwest_lat = parseInt(map.getBounds().getSouthWest().lat());
+			var southwest_lng = parseInt(map.getBounds().getSouthWest().lng());
+			var northeast_lat = parseInt(map.getBounds().getNorthEast().lat());
+			var northeast_lng = parseInt(map.getBounds().getNorthEast().lng());
+			for (var lat = southwest_lat; lat <= northeast_lat; lat++) {
+				for (var lng = southwest_lng; lng <= northeast_lng; lng++) {
+					getMarkersAroundCenter(lat, lng);
+				}
+			}
+		});
 	});
 });

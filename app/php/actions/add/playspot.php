@@ -23,7 +23,11 @@
 	if ($errflag) {
 		$_SESSION['ERRMSG_ARR'] = $errmsg_arr;
 		session_write_close();
-		header('Location: http://rivers.camlittle.com/');
+		if (isset($_SERVER['HTTP_REFERER'])) {
+			header('Location: ' . $_SERVER['HTTP_REFERER']);
+		} else {
+			header('Location: http://rivers.camlittle.com/');
+		}
 		exit();
 	} else {
 		performSQL($sql_string, 'playspot');
