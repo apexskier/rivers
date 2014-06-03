@@ -1,6 +1,8 @@
 Rivers
 ======
 
+NOTE: This version of this project is currently abandoned. The new version resides at http://riverbeta.net
+
 A map for boaters
 -----------------
 
